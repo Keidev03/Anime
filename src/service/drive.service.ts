@@ -1,5 +1,5 @@
 import * as stream from 'stream';
-import Jimp from "jimp";
+import * as Jimp from "jimp";
 import { google } from "googleapis";
 import { resolve } from "path";
 
@@ -12,7 +12,7 @@ export class GoogleDriveService {
     }
     private initDrive() {
         const keyFilePath = resolve('secrect.json');
-        const scopes = ["https://www.googleapis.com/auth/drive"];           
+        const scopes = ["https://www.googleapis.com/auth/drive"];
 
         const auth = new google.auth.GoogleAuth({
             keyFile: keyFilePath,

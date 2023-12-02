@@ -4,11 +4,12 @@ import { Model } from 'mongoose';
 
 import { IEpisode } from './episode.schema';
 import { CreateEpisodeDTO, UpdateEpisodeDTO } from './dto';
+import { ConvertCSVService } from './../../service/csv.service';
 
 @Injectable()
 export class EpisodeService {
 
-    constructor(@InjectModel('Episode') private readonly episodeModel: Model<IEpisode>) { }
+    constructor(@InjectModel('Episode') private readonly episodeModel: Model<IEpisode>, private readonly convertCSV: ConvertCSVService) { }
 
     async CreateEpisode(data: CreateEpisodeDTO) {
         try {
@@ -20,10 +21,21 @@ export class EpisodeService {
                 serverDrive: data.serverDrive,
                 serverHydrax: data.serverHydrax,
                 serverHelvid: data.serverHelvid,
-                server: data.server,
+                serverDaily: data.serverDaily,
             });
             const result = await dataInsert.save();
             return result;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async CreateManyEpisode(file: Object) {
+        try {
+            const hearder: string[] = ['animeID', 'episode', 'duration', 'releaseDate', 'serverDrive', 'serverHydrax', 'serverHelvid', 'serverDaily'];
+            const dataInsert: string[] = await this.convertCSV.CSVtoJSON(file, hearder);
+            const episodes = await this.episodeModel.insertMany(dataInsert);
+            return episodes;
         } catch (error) {
             throw error;
         }

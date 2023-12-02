@@ -15,10 +15,7 @@ export class CategoryController {
             }
             const result = await this.categorySerice.CreateCategory(category);
             const response: Record<string, any> = {
-                "data": {
-                    id: result.id,
-                    category: result.name
-                }
+                Message: "Create successfully",
             }
             return response;
         } catch (error) {

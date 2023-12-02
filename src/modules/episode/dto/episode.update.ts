@@ -32,5 +32,5 @@ export class UpdateEpisodeDTO {
 
     @IsOptional()
     @IsString()
-    server: string
+    serverDaily: string
 }

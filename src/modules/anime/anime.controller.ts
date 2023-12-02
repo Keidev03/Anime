@@ -91,7 +91,7 @@ export class AnimeController {
         }
     }
 
-    @UseGuards(AuthGuard)
+    // @UseGuards(AuthGuard)
     @HttpCode(HttpStatus.OK)
     @Get()
     async GetAllAnime(@Query() query: PaginationAnimeDTO, @Request() request: any) {
@@ -145,11 +145,7 @@ export class AnimeController {
                     releaseDate: result.releaseDate,
                     updateAt: result.updateAt,
                     imagePoster: `https://drive.google.com/uc?export=view&id=${result.imagePoster}`,
-                    imageBackground: result.imageBackground,
-                    Request: {
-                        Type: "GET",
-                        URL: `${this.url}/anime/` + result.id
-                    }
+                    imageBackground: result.imageBackground
                 }
             }
             return response;

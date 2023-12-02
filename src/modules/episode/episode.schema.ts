@@ -8,7 +8,7 @@ export interface IEpisode {
     serverDrive: string,
     serverHydrax: string,
     serverHelvid: string,
-    server: string,
+    serverDaily: string,
 };
 
 export const EpisodeSchema = new mongoose.Schema({
@@ -19,5 +19,5 @@ export const EpisodeSchema = new mongoose.Schema({
     serverDrive: { type: String },
     serverHydrax: { type: String },
     serverHelvid: { type: String },
-    server: { type: String },
+    serverDaily: { type: String },
 });

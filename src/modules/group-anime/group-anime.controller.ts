@@ -17,7 +17,7 @@ export class GroupAnimeController {
         try {
             const result = await this.groupAnimeService.CreateGroupAnime(data);
             const response: Record<string, any> = {
-                Message: "Create GroupAnime successfully",
+                Message: "Create successfully",
                 Request: {
                     Type: "GET",
                     URL: `/group-anime/` + result.id
