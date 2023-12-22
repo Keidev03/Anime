@@ -21,3 +21,5 @@ export const EpisodeSchema = new mongoose.Schema({
     serverHelvid: { type: String },
     serverDaily: { type: String },
 });
+
+EpisodeSchema.index({ animeID: 1, episode: 1 });

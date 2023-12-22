@@ -4,7 +4,7 @@ import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { CreateAnimeDTO, PaginationAnimeDTO, UpdateAnimeDTO } from './dto';
 import { AnimeService } from './anime.service';
 import { IAnime } from './anime.schema';
-import { AuthGuard } from '../../authentication/auth.guard';
+import { AuthGuard } from '../../guards/auth.guard';
 
 @Controller('anime')
 export class AnimeController {

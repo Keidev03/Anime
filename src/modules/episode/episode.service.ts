@@ -66,7 +66,7 @@ export class EpisodeService {
     async FindAllEpisodeAnime(animeID: string) {
         try {
             const result = await this.episodeModel.find({ animeID: animeID }).populate({ path: 'animeID', select: 'title' });
-            if (!result) {
+            if (result.length === 0) {
                 throw new NotFoundException('The anime has not been shown yet')
             };
             return result;

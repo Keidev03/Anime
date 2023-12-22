@@ -23,13 +23,9 @@ export class GoogleDriveService {
 
     async UploadImage(fileImage: any, nameImage: string, width: number, height: number, idFolder: string) {
         try {
-            // Convert image into binary form
             const image = await Jimp.read(fileImage.buffer);
-            // Resize the image to 500x500 pixels
             const buffer: any = await image.resize(width, height).getBufferAsync(Jimp.MIME_JPEG);
-            // Create an intermediate stream to convert data from the buffer into a usable stream
             const bufferStream = new stream.PassThrough();
-            // Write data to the stream
             bufferStream.end(buffer);
             const response: any = await this.drive.files.create({
                 media: {
