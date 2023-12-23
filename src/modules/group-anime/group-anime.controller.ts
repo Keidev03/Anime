@@ -12,16 +12,12 @@ export class GroupAnimeController {
         this.url = process.env.URL;
     }
 
-    @Post()
+    @Post('create')
     async PostGroupAnime(@Body() data: CreateGroupAnimeDTO) {
         try {
-            const result = await this.groupAnimeService.CreateGroupAnime(data);
+            await this.groupAnimeService.CreateGroupAnime(data);
             const response: Record<string, any> = {
                 Message: "Create successfully",
-                Request: {
-                    Type: "GET",
-                    URL: `/group-anime/` + result.id
-                }
             }
             return response;
         } catch (error) {
@@ -29,12 +25,12 @@ export class GroupAnimeController {
         }
     }
 
-    @Delete(':id')
+    @Delete('delete/:id')
     async DeleteGroupAnime(@Param('id') id: string) {
         try {
-            const result = await this.groupAnimeService.DeleteGroupAnime(id);
+            await this.groupAnimeService.DeleteGroupAnime(id);
             const response: Record<string, any> = {
-                Message: "Delete GroupAnime successfully"
+                Message: "Delete successfully",
             }
             return response;
         } catch (error) {
@@ -42,7 +38,7 @@ export class GroupAnimeController {
         }
     }
 
-    @Get()
+    @Get('getall')
     async GetAllGroupAnime() {
         try {
             const results = await this.groupAnimeService.FindAllGroupAnime();
@@ -66,7 +62,7 @@ export class GroupAnimeController {
         }
     }
 
-    @Get(':id')
+    @Get('getone/:id')
     async GetAnimeGroupAnime(@Param('id') id: string) {
         try {
             const result = await this.groupAnimeService.FindAnimeGroupAnime(id);
@@ -83,7 +79,7 @@ export class GroupAnimeController {
         }
     }
 
-    @Post('handle/:id')
+    @Post('updateanime/:id')
     async PatchAnimeGroupAnime(@Param('id') id: string, @Body('animeID') animeID: string) {
         try {
             const result = await this.groupAnimeService.AddAnimeGroupAnime(id, animeID);
@@ -105,12 +101,12 @@ export class GroupAnimeController {
         }
     }
 
-    @Delete('handle/:id')
+    @Delete('deleteanime/:id')
     async DeleteAnimeGroupAnime(@Param('id') id: string, @Body('animeID') animeID: string) {
         try {
-            const result = await this.groupAnimeService.DelAnimeGroupAnime(id, animeID);
+            await this.groupAnimeService.DelAnimeGroupAnime(id, animeID);
             const response: Record<string, any> = {
-                Message: "Delete Anime GroupAnime successfully"
+                Message: "Delete Anime GroupAnime successfully",
             }
             return response;
         } catch (error) {

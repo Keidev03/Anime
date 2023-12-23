@@ -1,36 +1,51 @@
-import { Controller, Delete, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { FavouriteService } from './favourite.service';
 import { AuthGuard } from '../../guards/auth.guard';
+import { PaginationAnimeDTO } from '../anime/dto';
 
 @Controller('favourite')
 @UseGuards(AuthGuard)
 export class FavouriteController {
     constructor(private readonly favouriteService: FavouriteService) { }
 
-    @Post(':id')
-    async PostAnimeFavourite(@Req() req: any, @Param('id') animeID: string) {
+    @Post('create/:animeID')
+    async PostAnimeFavourite(@Req() req: any, @Param('animeID') animeID: string) {
         try {
-            const result = await this.favouriteService.AddAnimeFavourite(req.user.id, animeID);
-            return result;
+            await this.favouriteService.AddAnimeFavourite(req.user.id, animeID);
+            const response: Record<string, any> = {
+                Message: "Create successfully",
+            }
+            return response;
         } catch (error) {
             throw error;
         }
     }
 
-    @Delete(':id')
-    async DeleteAnimeFavourite(@Req() req: any, @Param('id') animeID: string) {
+    @Delete('delete/:animeID')
+    async DeleteAnimeFavourite(@Req() req: any, @Param('animeID') animeID: string) {
         try {
-            const result = await this.favouriteService.DeleteAnimeFavourite(req.user.id, animeID);
-            return result;
+            await this.favouriteService.DeleteAnimeFavourite(req.user.id, animeID);
+            const response: Record<string, any> = {
+                Message: "Delete successfully",
+            }
+            return response;
         } catch (error) {
             throw error;
         }
     }
 
-    @Get()
-    async GetAllFavourite(@Req() req: any) {
+    @Get('getall')
+    async GetAllFavourite(@Req() req: any, @Query() query: PaginationAnimeDTO) {
         try {
-            const result = await this.favouriteService.FindAllFavourite(req.user.id);
+            const result = await this.favouriteService.FindAllFavourite(req.user.id, query.page, query.limit);
+            const response: Record<string, any> = {
+                "Count": result.length,
+                "data": result.map(anime => {
+                    return {
+                        anime: anime.animeID
+                    }
+                })
+            }
             return result;
         } catch (error) {
             throw error;

@@ -15,7 +15,7 @@ export const EpisodeSchema = new mongoose.Schema({
     animeID: { type: mongoose.Types.ObjectId, required: true, ref: 'Anime' },
     episode: { type: Number, required: true },
     duration: { type: Number, required: true },
-    releaseDate: { type: Date, required: true, timezone: 'Asia/Ho_Chi_Minh' },
+    releaseDate: { type: Date, required: true },
     serverDrive: { type: String },
     serverHydrax: { type: String },
     serverHelvid: { type: String },

@@ -20,10 +20,10 @@ export class ReviewService {
         }
     }
 
-    async UpdateReview(userID: string, animeID: string, review: string, time: Date) {
+    async UpdateReview(userID: string, animeID: string, reviewID, review: string) {
         try {
             const updatedReview = await this.reviewModel.findOneAndUpdate(
-                { userID: userID, animeID: animeID, reviewTime: time },
+                { _id: reviewID, userID: userID, animeID: animeID },
                 { $set: { review: review } },
                 { new: true }
             );
@@ -38,8 +38,8 @@ export class ReviewService {
 
     async FindReviewAnime(animeID: string) {
         try {
-            const result = await this.reviewModel.find({ animeID: animeID });
-            return result;
+            const results = await this.reviewModel.find({ animeID: animeID });
+            return results;
         } catch (error) {
             throw error;
         }
@@ -47,8 +47,8 @@ export class ReviewService {
 
     async FindReviewUser(userID: string) {
         try {
-            const result = await this.reviewModel.find({ userID: userID });
-            return result;
+            const results = await this.reviewModel.find({ userID: userID });
+            return results;
         } catch (error) {
             throw error;
         }

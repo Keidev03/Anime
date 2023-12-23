@@ -110,4 +110,19 @@ export class AnimeService {
             throw error;
         }
     }
+
+    async SearchAnime(query: string): Promise<IAnime[]> {
+        try {
+            const results = await this.animeModel.find({
+                $or: [
+                    { title: { $regex: new RegExp(query, 'i') } },
+                    { anotherName: { $elemMatch: { $regex: new RegExp(query, 'i') } } }
+                ]
+            });
+            return results;
+            return results;
+        } catch (error) {
+            throw error;
+        }
+    }
 }

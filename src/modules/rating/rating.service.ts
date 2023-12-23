@@ -42,7 +42,7 @@ export class RatingService {
         }
     }
 
-    async FindRatingAnime(animeID: string) {
+    async FindAllRatingAnime(animeID: string) {
         try {
             const result: { averageRating: number; count: number } = {
                 averageRating: 0,

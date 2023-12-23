@@ -1,24 +1,22 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { EpisodeService } from './episode.service';
 import { CreateEpisodeDTO, UpdateEpisodeDTO } from './dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { AdminGuard } from 'src/guards/admin.guard';
 
 @Controller('episode')
 export class EpisodeController {
 
     constructor(private readonly episodeService: EpisodeService) { }
 
-    @Post()
+    @Post('create')
+    @UseGuards(AuthGuard, AdminGuard)
     async PostEpisode(@Body() data: CreateEpisodeDTO) {
         try {
-            const result = await this.episodeService.CreateEpisode(data);
+            await this.episodeService.CreateEpisode(data);
             const response: Record<string, any> = {
-                Message: 'Create successfully',
-                Request: {
-                    Type: "GET",
-                    URL: `/episode/` + result.animeID
-                }
-
+                Message: "Create episode successfully",
             }
             return response;
         } catch (error) {
@@ -27,6 +25,7 @@ export class EpisodeController {
     }
 
     @Post('csv')
+    @UseGuards(AuthGuard, AdminGuard)
     @UseInterceptors(FileInterceptor('csv'))
     async PostEpisodeCSV(@UploadedFile() file: Express.Multer.File) {
         try {
@@ -37,16 +36,13 @@ export class EpisodeController {
         }
     }
 
-    @Patch(':id')
+    @Patch('update/:id')
+    @UseGuards(AuthGuard, AdminGuard)
     async UpdateEpisode(@Param('id') id: string, @Body() data: UpdateEpisodeDTO) {
         try {
-            const result = await this.episodeService.UpdateEpisode(id, data);
+            await this.episodeService.UpdateEpisode(id, data);
             const response: Record<string, any> = {
                 Message: 'Update successfully',
-                Request: {
-                    Type: "GET",
-                    URL: `/episode/` + result.animeID
-                }
             }
             return response;
         } catch (error) {
@@ -54,10 +50,11 @@ export class EpisodeController {
         }
     }
 
-    @Delete(':id')
+    @Delete('delete/:id')
+    @UseGuards(AuthGuard, AdminGuard)
     async DeleteEpisode(@Param('id') id: string) {
         try {
-            const result = await this.episodeService.DeleteEpisode(id);
+            await this.episodeService.DeleteEpisode(id);
             const response: Record<string, any> = {
                 Message: 'Delete successfully',
             }
@@ -67,7 +64,7 @@ export class EpisodeController {
         }
     }
 
-    @Get(':id')
+    @Get('getall/:id')
     async GetAllEpisodeAnime(@Param('id') animeID: string) {
         try {
             const episodes = await this.episodeService.FindAllEpisodeAnime(animeID);
@@ -80,11 +77,7 @@ export class EpisodeController {
                         episode: episode.episode,
                         duration: episode.duration,
                         releaseDate: episode.releaseDate,
-                        server: [episode.serverDrive, episode.serverHelvid, episode.serverHydrax, episode.serverDaily],
-                        Request: {
-                            Type: "GET",
-                            URL: `/episode/` + episode.animeID
-                        }
+                        server: [episode.serverDrive, episode.serverHelvid, episode.serverHydrax, episode.serverDaily]
                     }
                 })
             }
@@ -94,7 +87,7 @@ export class EpisodeController {
         }
     }
 
-    @Get('anime/:id')
+    @Get('getone/:id')
     async GetOneEpisodeAnime(@Param('id') animeID: string, @Query('episode') episode: string) {
         try {
             const result = await this.episodeService.FindOneEpisodeAnime(animeID, episode);

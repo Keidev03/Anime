@@ -5,18 +5,20 @@ import { CreateAnimeDTO, PaginationAnimeDTO, UpdateAnimeDTO } from './dto';
 import { AnimeService } from './anime.service';
 import { IAnime } from './anime.schema';
 import { AuthGuard } from '../../guards/auth.guard';
+import { AdminGuard } from 'src/guards/admin.guard';
 
 @Controller('anime')
 export class AnimeController {
 
-    private readonly url: string;
+    // private readonly url: string;
 
     constructor(private readonly animeService: AnimeService) {
-        this.url = process.env.URL
+        // this.url = process.env.URL
     };
 
+    @Post('create')
+    @UseGuards(AuthGuard, AdminGuard)
     @HttpCode(HttpStatus.CREATED)
-    @Post()
     @UseInterceptors(FileFieldsInterceptor([
         { name: 'poster', maxCount: 1 },
         { name: 'background', maxCount: 1 },
@@ -33,11 +35,7 @@ export class AnimeController {
             }
             const result: IAnime = await this.animeService.CreateAnime(data, poster, background);
             const response: Record<string, any> = {
-                Message: "Create successfully",
-                Request: {
-                    Type: "GET",
-                    URL: `${this.url}/anime/` + result.id
-                }
+                Message: `Create Anime ${result.title} successfully`
             }
 
             return response;
@@ -47,8 +45,9 @@ export class AnimeController {
         }
     }
 
+    @Patch('update/:id')
+    @UseGuards(AuthGuard, AdminGuard)
     @HttpCode(HttpStatus.ACCEPTED)
-    @Patch(':id')
     @UseInterceptors(FileFieldsInterceptor([
         { name: 'poster', maxCount: 1 },
         { name: 'background', maxCount: 1 },
@@ -63,13 +62,9 @@ export class AnimeController {
             if (files?.background) {
                 background = files?.background[0];
             }
-            const result: IAnime = await this.animeService.UpdateAnime(id, data, poster, background);
+            await this.animeService.UpdateAnime(id, data, poster, background);
             const response: Record<string, any> = {
-                Message: "Patch successfully",
-                Request: {
-                    Type: "GET",
-                    URL: `${this.url}/anime/` + result.id
-                }
+                Message: "Patch successfully"
             }
             return response;
         } catch (error) {
@@ -77,11 +72,12 @@ export class AnimeController {
         }
     };
 
+    @Delete('delete/:id')
+    @UseGuards(AuthGuard, AdminGuard)
     @HttpCode(HttpStatus.ACCEPTED)
-    @Delete(':id')
     async DeleteAnime(@Param('id') id: string) {
         try {
-            const result: IAnime = await this.animeService.DeleteAnime(id);
+            await this.animeService.DeleteAnime(id);
             const response: Record<string, any> = {
                 Message: "Delete successfully"
             }
@@ -91,12 +87,10 @@ export class AnimeController {
         }
     }
 
-    // @UseGuards(AuthGuard)
+    @Get('getall')
     @HttpCode(HttpStatus.OK)
-    @Get()
     async GetAllAnime(@Query() query: PaginationAnimeDTO, @Request() request: any) {
         try {
-            console.log(request.user);
             const page = query.page || 1;
             const limit = query.limit || 20;
             const movies = await this.animeService.FindAllAnime(page, limit);
@@ -114,11 +108,7 @@ export class AnimeController {
                         releaseDate: movie.releaseDate,
                         updateAt: movie.updateAt,
                         imagePoster: `https://drive.google.com/uc?export=view&id=${movie.imagePoster}`,
-                        imageBackground: movie.imageBackground,
-                        Request: {
-                            Type: "GET",
-                            URL: `${this.url}/anime/` + movie.id
-                        }
+                        imageBackground: `https://drive.google.com/uc?export=view&id=${movie.imageBackground}`
                     }
                 })
             }
@@ -128,8 +118,8 @@ export class AnimeController {
         }
     }
 
+    @Get('getone/:id')
     @HttpCode(HttpStatus.OK)
-    @Get(':id')
     async GetOneAnime(@Param('id') id: string) {
         try {
             const result: IAnime = await this.animeService.FindOneAnime(id);
@@ -145,8 +135,27 @@ export class AnimeController {
                     releaseDate: result.releaseDate,
                     updateAt: result.updateAt,
                     imagePoster: `https://drive.google.com/uc?export=view&id=${result.imagePoster}`,
-                    imageBackground: result.imageBackground
+                    imageBackground: `https://drive.google.com/uc?export=view&id=${result.imageBackground}`
                 }
+            }
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    @Get('search')
+    async GetSearchAnime(@Query() query: any) {
+        try {
+            const results = await this.animeService.SearchAnime(query.query);
+            const response = {
+                "count": results.length,
+                "data": results.map(anime => {
+                    return {
+                        title: anime.title,
+                        image: `https://drive.google.com/uc?export=view&id=${anime.imagePoster}`
+                    }
+                })
             }
             return response;
         } catch (error) {

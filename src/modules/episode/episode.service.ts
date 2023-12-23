@@ -5,14 +5,16 @@ import { Model } from 'mongoose';
 import { IEpisode } from './episode.schema';
 import { CreateEpisodeDTO, UpdateEpisodeDTO } from './dto';
 import { ConvertCSVService } from './../../service/csv.service';
+import { AnimeService } from '../anime/anime.service';
 
 @Injectable()
 export class EpisodeService {
 
-    constructor(@InjectModel('Episode') private readonly episodeModel: Model<IEpisode>, private readonly convertCSV: ConvertCSVService) { }
+    constructor(@InjectModel('Episode') private readonly episodeModel: Model<IEpisode>, private readonly animeService: AnimeService, private readonly convertCSV: ConvertCSVService) { }
 
     async CreateEpisode(data: CreateEpisodeDTO) {
         try {
+            await this.animeService.FindOneAnime(data.animeID);
             const dataInsert = new this.episodeModel({
                 animeID: data.animeID,
                 episode: data.episode,
@@ -33,7 +35,10 @@ export class EpisodeService {
     async CreateManyEpisode(file: Object) {
         try {
             const hearder: string[] = ['animeID', 'episode', 'duration', 'releaseDate', 'serverDrive', 'serverHydrax', 'serverHelvid', 'serverDaily'];
-            const dataInsert: string[] = await this.convertCSV.CSVtoJSON(file, hearder);
+            const dataInsert: CreateEpisodeDTO[] = await this.convertCSV.CSVtoJSON(file, hearder);
+            for (let anime of dataInsert) {
+                await this.animeService.FindOneAnime(anime.animeID);
+            }
             const episodes = await this.episodeModel.insertMany(dataInsert);
             return episodes;
         } catch (error) {

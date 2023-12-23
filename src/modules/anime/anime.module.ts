@@ -10,6 +10,7 @@ import { CategoryModule } from '../category/category.module';
 @Module({
   imports: [MongooseModule.forFeature([{ name: 'Anime', schema: AnimeSchema }]), CategoryModule],
   controllers: [AnimeController],
-  providers: [AnimeService, GoogleDriveService]
+  providers: [AnimeService, GoogleDriveService],
+  exports: [AnimeService]
 })
 export class AnimeModule { }

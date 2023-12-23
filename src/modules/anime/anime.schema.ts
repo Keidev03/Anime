@@ -20,7 +20,7 @@ export const AnimeSchema = new mongoose.Schema({
     description: { type: String, required: true },
     category: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true }],
     namePart: { type: String, required: true },
-    releaseDate: { type: Date, required: true, timezone: 'Asia/Ho_Chi_Minh' },
+    releaseDate: { type: Date, required: true },
     imagePoster: { type: String, required: true },
     imageBackground: { type: String, required: true },
 

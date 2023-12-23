@@ -53,7 +53,7 @@ export class FavouriteService {
 
     async FindAllFavourite(userID: string, page: number, limit: number) {
         try {
-            const result = await this.favouriteModel.findOne({ userID: userID }).populate({ path: 'animeID' }).skip((page - 1) * limit).limit(limit);
+            const result = await this.favouriteModel.find({ userID: userID }).populate({ path: 'animeID' }).skip((page - 1) * limit).limit(limit);
             return result;
         } catch (error) {
             throw error;
