@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 
 import { IAnime } from './anime.schema';
 import { CreateAnimeDTO, UpdateAnimeDTO } from './dto';
-import { CategoryService } from '../category/category.service';
+import { GenresService } from '../genres/genres.service';
 import { GoogleDriveService } from '../../service/drive.service';
 
 
@@ -13,15 +13,15 @@ export class AnimeService {
 
     private readonly idFolder: string;
 
-    constructor(@InjectModel('Anime') private readonly animeModel: Model<IAnime>, private readonly driveService: GoogleDriveService, private readonly categoryService: CategoryService) {
+    constructor(@InjectModel('Anime') private readonly animeModel: Model<IAnime>, private readonly driveService: GoogleDriveService, private readonly genresService: GenresService) {
         this.idFolder = process.env.FOLDER;
     }
 
     async CreateAnime(dataCreate: CreateAnimeDTO, imagePoster?: any, imageBackgound?: any) {
         try {
 
-            const arrayCategories = dataCreate.category;
-            const checkCategory = await this.categoryService.CheckAllCategoryById(arrayCategories);
+            const arrayCategories = dataCreate.genres;
+            const checkCategory = await this.genresService.CheckAllGenresById(arrayCategories);
             if (!checkCategory) {
                 throw new NotFoundException('Category not found');
             }
@@ -32,7 +32,7 @@ export class AnimeService {
                 title: dataCreate.title,
                 anotherName: dataCreate.anotherName,
                 description: dataCreate.description,
-                category: dataCreate.category,
+                genres: dataCreate.genres,
                 totalEpisode: dataCreate.totalEpisode,
                 namePart: dataCreate.namePart,
                 releaseDate: dataCreate.releaseDate,
@@ -89,7 +89,7 @@ export class AnimeService {
 
     async FindAllAnime(page: number, limit: number) {
         try {
-            const movies = await this.animeModel.find().populate({ path: 'category', select: 'name -_id' }).skip((page - 1) * limit).limit(limit);
+            const movies = await this.animeModel.find().populate({ path: 'genres', select: 'name -_id' }).skip((page - 1) * limit).limit(limit);
             if (movies.length < 1) {
                 throw new NotFoundException("Anime not found");
             }
@@ -101,7 +101,7 @@ export class AnimeService {
 
     async FindOneAnime(id: string) {
         try {
-            const movie = await this.animeModel.findById(id).populate({ path: 'category', select: 'name -_id' });
+            const movie = await this.animeModel.findById(id).populate({ path: 'genres', select: 'name -_id' });
             if (!movie) {
                 throw new NotFoundException("Movie not found");
             }

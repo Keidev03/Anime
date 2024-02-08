@@ -3,11 +3,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { JwtModule } from '@nestjs/jwt';
 
 import { AnimeModule } from './modules/anime/anime.module';
-import { CategoryModule } from './modules/category/category.module';
-import { GroupAnimeModule } from './modules/group-anime/group-anime.module';
+import { GenresModule } from './modules/genres/genres.module';
 import { EpisodeModule } from './modules/episode/episode.module';
 import { RatingModule } from './modules/rating/rating.module';
-import { ReviewModule } from './modules/review/review.module';
+import { CommentModule } from './modules/comment/comment.module';
 import { FavouriteModule } from './modules/favourite/favourite.module';
 
 const uri = process.env.URI;
@@ -19,11 +18,10 @@ const uri = process.env.URI;
       global: true
     }),
     AnimeModule,
-    CategoryModule,
-    GroupAnimeModule,
+    GenresModule,
     EpisodeModule,
     RatingModule,
-    ReviewModule,
+    CommentModule,
     FavouriteModule
   ],
 })

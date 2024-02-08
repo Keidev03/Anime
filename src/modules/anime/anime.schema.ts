@@ -5,7 +5,7 @@ export interface IAnime {
     title: string
     anotherName: string[],
     description: string,
-    category: string[],
+    genres: string[],
     totalEpisode: string,
     namePart: string,
     releaseDate: Date,
@@ -18,7 +18,7 @@ export const AnimeSchema = new mongoose.Schema({
     title: { type: String, required: true },
     anotherName: [{ type: String, required: true }],
     description: { type: String, required: true },
-    category: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true }],
+    genres: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Genres', required: true }],
     namePart: { type: String, required: true },
     releaseDate: { type: Date, required: true },
     imagePoster: { type: String, required: true },

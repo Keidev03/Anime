@@ -1,17 +1,17 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { IReview } from './review.schema';
+import { IComment } from './comment.schema';
 
 @Injectable()
-export class ReviewService {
-    constructor(@InjectModel('Review') private readonly reviewModel: Model<IReview>) { }
-    async CreateReview(userID: string, animeID: string, review: string) {
+export class CommentService {
+    constructor(@InjectModel('Comment') private readonly commentModel: Model<IComment>) { }
+    async CreateComment(userID: string, animeID: string, comment: string) {
         try {
-            const dataInsert = new this.reviewModel({
+            const dataInsert = new this.commentModel({
                 userID: userID,
                 animeID: animeID,
-                review: review
+                comment: comment
             });
             const result = await dataInsert.save();
             return result;
@@ -20,11 +20,11 @@ export class ReviewService {
         }
     }
 
-    async UpdateReview(userID: string, animeID: string, reviewID, review: string) {
+    async UpdateComment(userID: string, animeID: string, commentID, comment: string) {
         try {
-            const updatedReview = await this.reviewModel.findOneAndUpdate(
-                { _id: reviewID, userID: userID, animeID: animeID },
-                { $set: { review: review } },
+            const updatedReview = await this.commentModel.findOneAndUpdate(
+                { _id: commentID, userID: userID, animeID: animeID },
+                { $set: { comment: comment } },
                 { new: true }
             );
             if (!updatedReview) {
@@ -36,18 +36,18 @@ export class ReviewService {
         }
     }
 
-    async FindReviewAnime(animeID: string) {
+    async FindCommentAnime(animeID: string) {
         try {
-            const results = await this.reviewModel.find({ animeID: animeID });
+            const results = await this.commentModel.find({ animeID: animeID });
             return results;
         } catch (error) {
             throw error;
         }
     }
 
-    async FindReviewUser(userID: string) {
+    async FindCommentUser(userID: string) {
         try {
-            const results = await this.reviewModel.find({ userID: userID });
+            const results = await this.commentModel.find({ userID: userID });
             return results;
         } catch (error) {
             throw error;

@@ -12,7 +12,7 @@ export class CreateAnimeDTO {
     
     @IsNotEmpty()
     @IsArray()
-    category: string[];
+    genres: string[];
     
     @IsNotEmpty()
     @IsString()

@@ -4,14 +4,12 @@ import { google } from "googleapis";
 import { resolve } from "path";
 
 export class GoogleDriveService {
-
-    private readonly drive;
-
+    private readonly drive
     constructor() {
         this.drive = this.initDrive();
     }
     private initDrive() {
-        const keyFilePath = resolve('secrect.json');
+        const keyFilePath = resolve('secret.json');
         const scopes = ["https://www.googleapis.com/auth/drive"];
 
         const auth = new google.auth.GoogleAuth({

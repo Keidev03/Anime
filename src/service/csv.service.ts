@@ -6,13 +6,10 @@ export class ConvertCSVService {
 
     public async CSVtoJSON(csvFile: any, key: string[]) {
         try {
-
             const csvBuffer = csvFile.buffer.toString('utf8');
-
             if (!this.IsCSV(csvBuffer)) {
                 throw new Error('Uploaded file is not a CSV.');
             }
-
             const fileJSON = await csv({
                 delimiter: ';',
                 noheader: false,

@@ -18,7 +18,7 @@ export class UpdateAnimeDTO {
     @IsOptional()
     @IsArray()
     @ArrayNotEmpty()
-    category: string[];
+    genres: string[];
 
     @IsOptional()
     @IsNumber()

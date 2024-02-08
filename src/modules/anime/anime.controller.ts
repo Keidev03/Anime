@@ -99,16 +99,16 @@ export class AnimeController {
                 "data": movies.map(movie => {
                     return {
                         id: movie.id,
-                        title: movie.title,
-                        anotherName: movie.anotherName,
-                        description: movie.description,
-                        category: movie.category,
-                        totalEpisode: movie.totalEpisode,
-                        namePart: movie.namePart,
-                        releaseDate: movie.releaseDate,
-                        updateAt: movie.updateAt,
-                        imagePoster: `https://drive.google.com/uc?export=view&id=${movie.imagePoster}`,
-                        imageBackground: `https://drive.google.com/uc?export=view&id=${movie.imageBackground}`
+                        Title: movie.title,
+                        AnotherName: movie.anotherName,
+                        Description: movie.description,
+                        Genres: movie.genres,
+                        TotalEpisode: movie.totalEpisode,
+                        NamePart: movie.namePart,
+                        ReleaseDate: movie.releaseDate,
+                        UpdateAt: movie.updateAt,
+                        ImagePoster: `https://drive.google.com/uc?export=view&id=${movie.imagePoster}`,
+                        ImageBackground: `https://drive.google.com/uc?export=view&id=${movie.imageBackground}`
                     }
                 })
             }
@@ -129,7 +129,7 @@ export class AnimeController {
                     title: result.title,
                     anotherName: result.anotherName,
                     description: result.description,
-                    category: result.category,
+                    genres: result.genres,
                     totalEpisode: result.totalEpisode,
                     namePart: result.namePart,
                     releaseDate: result.releaseDate,

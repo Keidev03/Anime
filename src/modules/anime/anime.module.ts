@@ -5,10 +5,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import { AnimeSchema } from './anime.schema';
 import { GoogleDriveService } from '../../service/drive.service';
-import { CategoryModule } from '../category/category.module';
+import { GenresModule } from '../genres/genres.module';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: 'Anime', schema: AnimeSchema }]), CategoryModule],
+  imports: [MongooseModule.forFeature([{ name: 'Anime', schema: AnimeSchema }]), GenresModule],
   controllers: [AnimeController],
   providers: [AnimeService, GoogleDriveService],
   exports: [AnimeService]
